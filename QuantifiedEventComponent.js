@@ -10,7 +10,7 @@ export default class PushNotification extends React.Component {
     return (
       <View style={styles.component}>
         <Text style={styles.name}>Event name: {this.props.name}</Text>
-        <Button onPress={() => {}} title="This will do something" />
+        <Button onPress={() => this.props.removeEvent(this.props.eventIndex)} title="This will do something" />
       </View>
     );
   }
