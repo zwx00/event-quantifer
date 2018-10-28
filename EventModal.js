@@ -1,29 +1,28 @@
 import React from 'react';
 import { Modal, View, Text, Button, StyleSheet } from 'react-native';
+import { connect } from 'react-redux';
 
-export default class EventModal extends React.Component {
-    constructor (props) {
-        super(props);
-    }
-
-    render () {
-        return (
+const EventModal = (props) => (
             <View style={styles.view}>
                 <Modal
                     animationType="slide"
                     transparent={false}
-                    visible={this.props.visible}
-                    onRequestClose={() => this.props.closeModal("new event")}
+                    visible={props.visible}
+                    onRequestClose={props.toggleModal}
                     transaprent={true}
                 >
                     <Text>idemo</Text>
-                    <Button title="Submit" onPress={() => this.props.closeModal("new event")} />
+                    <Button title="Submit" onPress={() => {
+                      props.addEvent("lala");
+                      props.toggleModal();
+                    }
+                    } />
                 </Modal>
             </View>
         );
-    }
-}
 
+
+export default connect(null, dispatch => ({ addEvent: dispatch.quantifiedEvents.addEvent }))(EventModal);
 
 const styles = StyleSheet.create({
     view: {

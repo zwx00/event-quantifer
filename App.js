@@ -1,72 +1,36 @@
 import React from "react";
-import { AsyncStorage, StyleSheet, Text, View, Button } from "react-native";
+import { StyleSheet, Text, View, Button } from "react-native";
+import { Provider, connect } from 'react-redux';
 import QuantifiedEventComponent from "./QuantifiedEventComponent";
 import Header from "./Header";
 import AddButton from "./AddButton";
 import EventModal from "./EventModal";
+import * as models from "./models";
+import { init } from "@rematch/core";
 
-export default class App extends React.Component {
-  
+const store = init({
+  models
+});
+
+class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      quantifiedEvents: [],
       modalVisibility: false
     };
-    
-    let storageAccess = AsyncStorage.getItem("myTrackedEvents");
 
-    storageAccess
-      .then(result =>
-        this.setState({ quantifiedEvents: JSON.parse(result ? result : []) })
-      )
-      .catch(result => this.setState({ quantifiedEvents: [] }));
-
-    this.addEvent = this.addEvent.bind(this);
-    this.removeEvent = this.removeEvent.bind(this);
-    this.showModal = this.showModal.bind(this);
-    this.refreshEvents = this.refreshEvents.bind(this);
+    this.toggleModal = this.toggleModal.bind(this);
   }
 
-  showModal() {
+  componentDidMount() {
+    this.props.readStorage();
+  }
+
+  toggleModal() {
     this.setState({
-      modalVisibility: true
+      modalVisibility: !this.state.modalVisbility
     });
-  }
-
-  editEvent(event_index) {}
-
-  refreshEvents () {
-    AsyncStorage.getItem(
-      "myTrackedEvents"
-    ).then((result) =>
-        this.setState({ 
-          quantifiedEvents: result
-        })
-    ).catch(result => this.setState({ quantifiedEvents: this.state.quantifiedEvents }));
-  }
-
-  addEvent(event_name) {
-    this.setState({
-      modalVisibility: false
-    });
-    
-    AsyncStorage.setItem(
-      "myTrackedEvents",
-      JSON.stringify([...this.state.quantifiedEvents, { name: event_name }])
-    ).then(this.refreshEvents);
-  }
-
-  removeEvent(eventIndex) {
-    this.setState({
-      modalVisibility: false
-    });
-    
-    AsyncStorage.setItem(
-      "myTrackedEvents",
-      JSON.stringify(this.state.quantifiedEvents.splice(eventIndex, 1)),
-    ).then(this.refreshEvents);
   }
 
   render() {
@@ -75,18 +39,21 @@ export default class App extends React.Component {
         <Header />
         <View style={styles.content}>
           <View style={styles.events}>
-            {this.state.quantifiedEvents.map((obj, index) => (
-              <QuantifiedEventComponent removeEvent={this.removeEvent} eventIndex={index} key={index} name={obj.name} />
+            {this.props.quantifiedEvents.map((obj, index) => (
+              <QuantifiedEventComponent
+                eventIndex={index}
+                key={index}
+                name={obj.name}
+              />
             ))}
           </View>
           <View style={styles.footer}>
-            <AddButton addEvent={this.showModal} />
+            <AddButton toggleModal={this.toggleModal} />
           </View>
         </View>
         <EventModal
-          eventName={this.state.eventName}
           visible={this.state.modalVisibility}
-          closeModal={this.addEvent}
+          toggleModal={this.toggleModal}
         />
       </View>
     );
@@ -117,3 +84,25 @@ const styles = StyleSheet.create({
     paddingBottom: 25
   }
 });
+
+const mapState = state => ({
+  quantifiedEvents: state.quantifiedEvents
+});
+
+const mapDispatch = dispatch => ({
+  ...dispatch.quantifiedEvents,
+  
+});
+
+const ConnectedApp = connect(mapState, mapDispatch)(App);
+
+
+export default AppWrapper = props => (
+  <Provider store={store}>
+    <ConnectedApp />
+  </Provider>
+);
+
+
+
+
