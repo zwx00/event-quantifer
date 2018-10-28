@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View, Button } from "react-native";
-import { Provider, connect } from 'react-redux';
+import { Provider, connect } from "react-redux";
 import QuantifiedEventComponent from "./QuantifiedEventComponent";
 import Header from "./Header";
 import AddButton from "./AddButton";
@@ -90,19 +90,16 @@ const mapState = state => ({
 });
 
 const mapDispatch = dispatch => ({
-  ...dispatch.quantifiedEvents,
-  
+  ...dispatch.quantifiedEvents
 });
 
-const ConnectedApp = connect(mapState, mapDispatch)(App);
+const ConnectedApp = connect(
+  mapState,
+  mapDispatch
+)(App);
 
-
-export default AppWrapper = props => (
+export default (AppWrapper = props => (
   <Provider store={store}>
     <ConnectedApp />
   </Provider>
-);
-
-
-
-
+));

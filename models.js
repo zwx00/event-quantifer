@@ -12,26 +12,31 @@ export const quantifiedEvents = {
       return [...state, payload];
     },
     removeEvent(state, payload) {
-      return [...state.slice(0, payload), ...state.slice(payload+1) ];
-    },
+      return [...state.slice(0, payload), ...state.slice(payload + 1)];
+    }
   },
-  effects: (dispatch) => ({
+  effects: dispatch => ({
     async readStorage(payload, rootState) {
-      dispatch.quantifiedEvents.initEvents(JSON.parse(await AsyncStorage.getItem(STORAGE_ID)));
+      dispatch.quantifiedEvents.initEvents(
+        JSON.parse(await AsyncStorage.getItem(STORAGE_ID))
+      );
     },
     async writeEvent(payload, rootState) {
-      await AsyncStorage.setItem(STORAGE_ID, 
-        JSON.stringify([...rootState.quantifiedEvents.state, payload]));
+      await AsyncStorage.setItem(
+        STORAGE_ID,
+        JSON.stringify([...rootState.quantifiedEvents.state, payload])
+      );
       dispatch.quantifiedEvents.addEvent(payload);
     },
     async deleteEvent(payload, rootState) {
-      await AsyncStorage.setItem(STORAGE_ID, JSON.stringify([
-        ...rootState.quantifiedEvents.state.slice(0, payload),
-        ...rootState.quantifiedEvents.state.slice(payload+1),
-      ]));
+      await AsyncStorage.setItem(
+        STORAGE_ID,
+        JSON.stringify([
+          ...rootState.quantifiedEvents.state.slice(0, payload),
+          ...rootState.quantifiedEvents.state.slice(payload + 1)
+        ])
+      );
       dispatch.quantifiedEvents.removeEvent(payload);
-    },
-  }),
+    }
+  })
 };
-
-

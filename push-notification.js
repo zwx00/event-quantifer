@@ -1,29 +1,27 @@
-import React from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, View, Button } from "react-native";
 
 export default class PushNotification extends React.Component {
-    constructor(props) {
-        super(props);
-    }
+  constructor(props) {
+    super(props);
+  }
 
   render() {
-      return (
-        <View>
-          <Text>Event name: {this.props.name}</Text>
-          <Button
-              title="This will do something"
-          />
-        </View>
+    return (
+      <View>
+        <Text>Event name: {this.props.name}</Text>
+        <Button title="This will do something" />
+      </View>
     );
   }
 }
 
 const styles = StyleSheet.create({
-container: {
-    borderColor: 'black',
+  container: {
+    borderColor: "black",
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center"
+  }
 });
