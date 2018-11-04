@@ -1,15 +1,42 @@
-import React from "react";
-import { StyleSheet, Text, View, Button } from "react-native";
-import { Provider, connect } from "react-redux";
-import QuantifiedEventComponent from "./QuantifiedEventComponent";
-import Header from "./Header";
-import AddButton from "./AddButton";
-import EventModal from "./EventModal";
-import * as models from "./models";
-import { init } from "@rematch/core";
+import React from 'react';
+import {
+  StyleSheet, View,
+} from 'react-native';
+import { Provider, connect } from 'react-redux';
+import { init } from '@rematch/core';
+import QuantifiedEventComponent from './QuantifiedEventComponent';
+import Header from './Header';
+import AddButton from './AddButton';
+import EventModal from './EventModal';
+import * as models from './models';
 
 const store = init({
-  models
+  models,
+});
+
+const styles = StyleSheet.create({
+  layout: {
+    flex: 1,
+    display: 'flex',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+  },
+  content: {
+    flex: 1,
+    borderWidth: 1,
+    width: '100%',
+    justifyContent: 'space-between',
+  },
+  events: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  footer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    paddingBottom: 25,
+  },
 });
 
 class App extends React.Component {
@@ -17,7 +44,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      modalVisibility: false
+      modalVisibility: false,
     };
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -29,7 +56,7 @@ class App extends React.Component {
 
   toggleModal() {
     this.setState({
-      modalVisibility: !this.state.modalVisbility
+      modalVisibility: !this.state.modalVisibility,
     });
   }
 
@@ -43,6 +70,7 @@ class App extends React.Component {
               <QuantifiedEventComponent
                 eventIndex={index}
                 key={index}
+                deleteEvent={() => this.props.deleteEvent(index)}
                 name={obj.name}
               />
             ))}
@@ -54,52 +82,30 @@ class App extends React.Component {
         <EventModal
           visible={this.state.modalVisibility}
           toggleModal={this.toggleModal}
+          writeEvent={this.props.writeEvent}
         />
       </View>
     );
   }
 }
 
-const styles = StyleSheet.create({
-  layout: {
-    flex: 1,
-    display: "flex",
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "flex-start"
-  },
-  content: {
-    flex: 1,
-    borderWidth: 1,
-    width: "100%",
-    justifyContent: "space-between"
-  },
-  events: {
-    width: "100%",
-    alignItems: "center"
-  },
-  footer: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    paddingBottom: 25
-  }
-});
-
 const mapState = state => ({
-  quantifiedEvents: state.quantifiedEvents
+  quantifiedEvents: state.quantifiedEvents,
 });
 
 const mapDispatch = dispatch => ({
-  ...dispatch.quantifiedEvents
+  ...dispatch.quantifiedEvents,
 });
 
 const ConnectedApp = connect(
   mapState,
-  mapDispatch
+  mapDispatch,
 )(App);
 
-export default (AppWrapper = props => (
+const AppWrapper = () => (
   <Provider store={store}>
     <ConnectedApp />
   </Provider>
-));
+);
+
+export default AppWrapper;
