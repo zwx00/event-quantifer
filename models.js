@@ -19,17 +19,10 @@ export const quantifiedEvents = {
     async readStorage() {
       let storedEvents = await AsyncStorage.getItem(STORAGE_ID);
       if (storedEvents === null) {
-        await AsyncStorage.setItem(
-          STORAGE_ID,
-          JSON.stringify([])
-        );
-        dispatch.quantifiedEvents.initEvents(
-          []
-        );
+        await AsyncStorage.setItem(STORAGE_ID, JSON.stringify([]));
+        dispatch.quantifiedEvents.initEvents([]);
       } else {
-        dispatch.quantifiedEvents.initEvents(
-          JSON.parse(storedEvents)
-        );
+        dispatch.quantifiedEvents.initEvents(JSON.parse(storedEvents));
       }
     },
     async writeEvent(payload, rootState) {

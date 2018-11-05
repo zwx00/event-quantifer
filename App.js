@@ -1,42 +1,40 @@
-import React from 'react';
-import {
-  StyleSheet, View,
-} from 'react-native';
-import { Provider, connect } from 'react-redux';
-import { init } from '@rematch/core';
-import QuantifiedEventComponent from './QuantifiedEventComponent';
-import Header from './Header';
-import AddButton from './AddButton';
-import EventModal from './EventModal';
-import * as models from './models';
+import React from "react";
+import { StyleSheet, View } from "react-native";
+import { Provider, connect } from "react-redux";
+import { init } from "@rematch/core";
+import QuantifiedEventComponent from "./QuantifiedEventComponent";
+import Header from "./Header";
+import AddButton from "./AddButton";
+import EventModal from "./EventModal";
+import * as models from "./models";
 
 const store = init({
-  models,
+  models
 });
 
 const styles = StyleSheet.create({
   layout: {
     flex: 1,
-    display: 'flex',
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    display: "flex",
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "flex-start"
   },
   content: {
     flex: 1,
     borderWidth: 1,
-    width: '100%',
-    justifyContent: 'space-between',
+    width: "100%",
+    justifyContent: "space-between"
   },
   events: {
-    width: '100%',
-    alignItems: 'center',
+    width: "100%",
+    alignItems: "center"
   },
   footer: {
-    flexDirection: 'row',
-    justifyContent: 'flex-end',
-    paddingBottom: 25,
-  },
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    paddingBottom: 25
+  }
 });
 
 class App extends React.Component {
@@ -44,7 +42,7 @@ class App extends React.Component {
     super(props);
 
     this.state = {
-      modalVisibility: false,
+      modalVisibility: false
     };
 
     this.toggleModal = this.toggleModal.bind(this);
@@ -56,7 +54,7 @@ class App extends React.Component {
 
   toggleModal() {
     this.setState({
-      modalVisibility: !this.state.modalVisibility,
+      modalVisibility: !this.state.modalVisibility
     });
   }
 
@@ -90,16 +88,16 @@ class App extends React.Component {
 }
 
 const mapState = state => ({
-  quantifiedEvents: state.quantifiedEvents,
+  quantifiedEvents: state.quantifiedEvents
 });
 
 const mapDispatch = dispatch => ({
-  ...dispatch.quantifiedEvents,
+  ...dispatch.quantifiedEvents
 });
 
 const ConnectedApp = connect(
   mapState,
-  mapDispatch,
+  mapDispatch
 )(App);
 
 const AppWrapper = () => (
