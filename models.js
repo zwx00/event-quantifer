@@ -1,6 +1,6 @@
 import { AsyncStorage } from "react-native";
 
-const STORAGE_ID = "myTrackedEvent";
+const STORAGE_ID = "myTrackedEvent2";
 
 export const quantifiedEvents = {
   state: [],
@@ -26,11 +26,12 @@ export const quantifiedEvents = {
       }
     },
     async writeEvent(payload, rootState) {
-      await AsyncStorage.setItem(
+      AsyncStorage.setItem(
         STORAGE_ID,
         JSON.stringify([...rootState.quantifiedEvents, payload])
-      );
-      dispatch.quantifiedEvents.addEvent(payload);
+      ).then(() => {
+        dispatch.quantifiedEvents.addEvent(payload);
+      });
     },
     async deleteEvent(payload, rootState) {
       await AsyncStorage.setItem(

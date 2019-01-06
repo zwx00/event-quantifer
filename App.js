@@ -78,7 +78,7 @@ class App extends React.Component {
                 eventIndex={index}
                 key={index}
                 deleteEvent={() => this.props.deleteEvent(index)}
-                name={obj.name}
+                {...obj}
               />
             ))}
           </View>

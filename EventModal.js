@@ -50,13 +50,7 @@ const EventModal = props => {
       <View style={styles.container}>
         <View style={styles.view}>
           <View style={styles.flex}>
-            <Field
-              name="eventName"
-              component={textInput}
-              type="text"
-              placeholder="your event name..."
-            />
-            <TextInputField name="lols" placeholder="lalala" />
+            <TextInputField name="eventName" placeholder="event name..." />
 
             <Button
               raised
