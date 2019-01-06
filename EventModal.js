@@ -1,5 +1,7 @@
 import React from "react";
 import { Modal, View, TextInput, Button, StyleSheet } from "react-native";
+import { reduxForm, Field } from "redux-form";
+import { TextInputField } from "./FieldWrapper.js";
 
 const styles = StyleSheet.create({
   container: {
@@ -31,69 +33,41 @@ const styles = StyleSheet.create({
     justifyContent: "space-around"
   }
 });
+const EventModal = props => {
+  const textInput = ({ input: { onChange, value }, ...props }) => (
+    <TextInput onChangeText={onChange} value={value} {...props} />
+  );
 
-class EventModal extends React.Component {
-  constructor(props) {
-    super(props);
+  return (
+    <Modal
+      animationType="slide"
+      onRequestClose={() => {
+        props.toggleModal();
+      }}
+      visible={props.visible}
+      transparent
+    >
+      <View style={styles.container}>
+        <View style={styles.view}>
+          <View style={styles.flex}>
+            <Field
+              name="eventName"
+              component={textInput}
+              type="text"
+              placeholder="your event name..."
+            />
+            <TextInputField name="lols" placeholder="lalala" />
 
-    this.state = {
-      name: "",
-      invalidInput: false
-    };
-
-    this.submit = this.submit.bind(this);
-  }
-
-  submit() {
-    if (!(this.state.name.length > 0)) {
-      this.setState({ invalidInput: true });
-    } else {
-      this.props.writeEvent({ name: this.state.name });
-      this.setState({ name: "" });
-      this.props.toggleModal();
-    }
-  }
-
-  render() {
-    return (
-      <Modal
-        animationType="slide"
-        visible={this.props.visible}
-        onRequestClose={() => {
-          this.setState({ name: "" });
-          this.props.toggleModal();
-        }}
-        transparent
-      >
-        <View style={styles.container}>
-          <View style={styles.view}>
-            <View style={styles.flex}>
-              <TextInput
-                style={styles.textInput}
-                placeholder="yes, name your habit here..."
-                onChangeText={name =>
-                  this.setState({
-                    name,
-                    invalidInput: false
-                  })
-                }
-                value={this.state.name}
-                underlineColorAndroid={
-                  this.state.invalidInput ? "darkred" : "white"
-                }
-              />
-              <Button
-                raised
-                containerViewStyle={styles.submitButton}
-                title="Submit"
-                onPress={this.submit}
-              />
-            </View>
+            <Button
+              raised
+              containerViewStyle={styles.submitButton}
+              title="Submit"
+              onPress={props.handleSubmit}
+            />
           </View>
         </View>
-      </Modal>
-    );
-  }
-}
-
-export default EventModal;
+      </View>
+    </Modal>
+  );
+};
+export default reduxForm({ form: "eventForm" })(EventModal);

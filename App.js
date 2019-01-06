@@ -1,5 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
+import { combineReducers } from "redux";
 import { Provider, connect } from "react-redux";
 import { init } from "@rematch/core";
 import QuantifiedEventComponent from "./QuantifiedEventComponent";
@@ -7,8 +8,16 @@ import Header from "./Header";
 import AddButton from "./AddButton";
 import EventModal from "./EventModal";
 import * as models from "./models";
+import { reducer as formReducer } from "redux-form";
+import { composeWithDevTools } from "remote-redux-devtools";
 
 const store = init({
+  redux: {
+    enchancers: [composeWithDevTools()],
+    reducers: {
+      form: formReducer
+    }
+  },
   models
 });
 
@@ -80,7 +89,11 @@ class App extends React.Component {
         <EventModal
           visible={this.state.modalVisibility}
           toggleModal={this.toggleModal}
-          writeEvent={this.props.writeEvent}
+          onSubmit={data => {
+            console.log(data);
+            this.props.writeEvent(data);
+            this.toggleModal();
+          }}
         />
       </View>
     );

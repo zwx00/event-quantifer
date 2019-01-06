@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Button } from "react-native";
 
 const PushNotification = props => (
   <View style={styles.component}>
-    <Text style={styles.name}>Event name: {props.name}</Text>
+    <Text style={styles.name}>Event name: {props.eventName}</Text>
     <Button onPress={props.deleteEvent} title="This will do something" />
   </View>
 );
